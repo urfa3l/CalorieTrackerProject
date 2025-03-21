@@ -6,15 +6,21 @@ namespace CalorieTracker
 {
     public class DatabaseHelper
     {
-        private readonly string connectionString;
+        private static string connectionString = "Data Source=(localdb)\\local;Initial Catalog=miniproject;Integrated Security=true;";
 
-        public DatabaseHelper(string connectionString)
+        private static string initialconnectionString = "Data Source=(localdb)\\local;Integrated Security=true;";
+
+        public static SqlConnection GetConnection()
         {
-            this.connectionString = connectionString;
+            return new SqlConnection(connectionString);
+        }
+        public static SqlConnection GetBase()
+        {
+            return new SqlConnection(initialconnectionString);
         }
 
         // Method to open and return a new SQL connection
-        public SqlConnection OpenConnection()
+        public static SqlConnection OpenConnection()
         {
             SqlConnection connection = new SqlConnection(connectionString);
             connection.Open();
@@ -22,13 +28,12 @@ namespace CalorieTracker
         }
 
         // Executes a query and returns a SqlDataReader
-        public SqlDataReader ExecuteQuery(string query, Action<SqlCommand> parameterize = null)
+        public static SqlDataReader ExecuteQuery(string query, Action<SqlCommand> parameterize = null)
         {
             SqlConnection connection = OpenConnection(); // Open connection
             try
             {
                 SqlCommand command = new SqlCommand(query, connection);
-                parameterize?.Invoke(command);
                 return command.ExecuteReader(CommandBehavior.CloseConnection);
             }
             catch
@@ -39,12 +44,11 @@ namespace CalorieTracker
         }
 
         // Executes a non-query SQL command (like INSERT, UPDATE, DELETE)
-        public int ExecuteNonQuery(string query, Action<SqlCommand> parameterize = null)
+        public static int ExecuteNonQuery(string query, Action<SqlCommand> parameterize = null)
         {
-            using (SqlConnection connection = OpenConnection()) // Use 'using' for automatic disposal
+            using (SqlConnection connection = OpenConnection())
             using (SqlCommand command = new SqlCommand(query, connection))
             {
-                parameterize?.Invoke(command);
                 return command.ExecuteNonQuery();
             }
         }

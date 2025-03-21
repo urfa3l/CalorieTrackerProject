@@ -1,6 +1,6 @@
 ﻿using CalorieTrackerProject.Database;
 using System;
-using System.Data.SqlClient;
+using Microsoft.Data.SqlClient;
 
 namespace CalorieTracker
 {
@@ -15,12 +15,12 @@ namespace CalorieTracker
             this.userModel = userModel;
         }
 
-        public static bool Register()
+        public static void Register()
         {
-            string query = "INSERT INTO Users (Username, Password, FirstName, LastName, DateOfBirth, Gender, Height, Weight) " +
-                           "VALUES (@Username, @Password, @FirstName, @LastName, @DateOfBirth, @Gender, @Height, @Weight)";
-            return dbManager.ExecuteNonQuery(query, command =>
-            {
+            var connection = DatabaseHelper.GetConnection();
+            connection.Open();
+            var command = new SqlCommand("INSERT INTO Users (Username, Password, FirstName, LastName, DateOfBirth, Gender, Height, Weight) " +
+                                            "VALUES (@Username, @Password, @FirstName, @LastName, @DateOfBirth, @Gender, @Height, @Weight)", connection);
                 command.Parameters.AddWithValue("@Username", userModel.Username);
                 command.Parameters.AddWithValue("@Password", userModel.Password);
                 command.Parameters.AddWithValue("@FirstName", userModel.FirstName);
@@ -45,15 +45,17 @@ namespace CalorieTracker
                 return (int)reader["UserID"];
             }
             return -1;
+        //???????
+        //making extractor of every attribute
         }
 
         public static bool Login(string username, string password, DatabaseHelper dbManager)
         {
-            string query = "SELECT COUNT(*) FROM Users WHERE Username = @Username AND Password = @Password";
-            using var reader = dbManager.ExecuteQuery(query, command =>
-            {
-                command.Parameters.AddWithValue("@Username", username);
-                command.Parameters.AddWithValue("@Password", password);
+        using var connection = DatabaseHelper.GetConnection();
+        connection.Open();
+        var command = new SqlCommand("SELECT PasswordHash FROM Users WHERE Username = @Username", connection);
+        command.Parameters.AddWithValue("@Username", username);
+        command.Parameters.AddWithValue("@Password", password);
             });
 
             if (reader.Read())
@@ -61,6 +63,8 @@ namespace CalorieTracker
                 return (int)reader[0] > 0;
             }
             return false;
+
+
         }
     }
 }

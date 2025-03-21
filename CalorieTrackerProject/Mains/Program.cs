@@ -1,5 +1,6 @@
 ﻿using CalorieTracker;
 using CalorieTrackerProject.Functions.Excercise;
+using CalorieTrackerProject.Operations;
 using System;
 
 namespace CalorieTracker
@@ -10,8 +11,6 @@ namespace CalorieTracker
 
         public static void Main()
         {
-            string connectionString = "Data Source=your_server;Initial Catalog=your_database;Integrated Security=True";
-            dbManager = new DatabaseHelper(connectionString);
 
             Console.WriteLine("Welcome to the Calorie Tracker!");
 
@@ -46,6 +45,7 @@ namespace CalorieTracker
                 else if (menuChoice == 2)
                 {
                     userId = UserCredential.Login();
+                    UserMenu(userId)
                 }
                 else if (menuChoice == 3)
                 {
@@ -73,12 +73,13 @@ namespace CalorieTracker
             while (!logout)
             {
                 Console.WriteLine("\nUser Menu:");
-                Console.WriteLine("1. Add Calorie Entry");
+                Console.WriteLine("1. Add Food eaten");
                 Console.WriteLine("2. View Calorie Plan");
                 Console.WriteLine("3. View Daily Calorie Summary");
                 Console.WriteLine("4. View Monthly Calorie Summary");
                 Console.WriteLine("5. Add Exercise");
-                Console.WriteLine("6. Logout");
+                Console.WriteLine("6. Add Exercise List");
+                Console.WriteLine("7. Logout");
 
                 Console.Write("Enter your choice: ");
 
@@ -90,25 +91,29 @@ namespace CalorieTracker
 
                 if (userMenuChoice == 1)
                 {
-                    AddCalorie.AddCalorieEntry(userId);
+                    CalorieOperator.AddCalorieEntry(userId);
                 }
                 else if (userMenuChoice == 2)
                 {
-                    ReadCalories.ViewCaloriePlan(userId);
+                    CalorieOperator.ViewCaloriePlan(userId);
                 }
                 else if (userMenuChoice == 3)
                 {
-                    ReadCalories.ViewDailyCalorieSummary(userId);
+                    CalorieOperator.ViewDailyCalorieSummary(userId);
                 }
                 else if (userMenuChoice == 4)
                 {
-                    ReadCalories.ViewMonthlyCalorieSummary(userId);
+                    CalorieOperator.ViewMonthlyCalorieSummary(userId);
                 }
                 else if (userMenuChoice == 5)
                 {
-                    AddExcercise.AddExercise(userId);
+                    AddExercise.AddExercise(userId);
                 }
                 else if (userMenuChoice == 6)
+                {
+                    AddExercise.AddExercise(userId);
+                }
+                else if(userMenuChoice == 7)
                 {
                     logout = true;
                 }
