@@ -6,5 +6,7 @@ namespace CalorieTracker
 {
     internal class Excercise
     {
+        public string name {  get; set; }
+
     }
 }
