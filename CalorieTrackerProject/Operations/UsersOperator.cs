@@ -7,29 +7,29 @@ namespace CalorieTracker
     public class UserCredential
     {
         private DatabaseHelper dbManager;
-        private UserModel userModel;
 
-        public UserCredential(DatabaseHelper dbManager, UserModel userModel)
+        public UserCredential(DatabaseHelper dbManager, User userModel)
         {
             this.dbManager = dbManager;
-            this.userModel = userModel;
+            //this.userModel = userModel;
         }
 
-        public static void Register()
+        public static bool Register(User user)
         {
             var connection = DatabaseHelper.GetConnection();
             connection.Open();
             var command = new SqlCommand("INSERT INTO Users (Username, Password, FirstName, LastName, DateOfBirth, Gender, Height, Weight) " +
                                             "VALUES (@Username, @Password, @FirstName, @LastName, @DateOfBirth, @Gender, @Height, @Weight)", connection);
-                command.Parameters.AddWithValue("@Username", userModel.Username);
-                command.Parameters.AddWithValue("@Password", userModel.Password);
-                command.Parameters.AddWithValue("@FirstName", userModel.FirstName);
-                command.Parameters.AddWithValue("@LastName", userModel.LastName);
-                command.Parameters.AddWithValue("@DateOfBirth", userModel.DateOfBirth);
-                command.Parameters.AddWithValue("@Gender", userModel.Gender);
-                command.Parameters.AddWithValue("@Height", userModel.Height);
-                command.Parameters.AddWithValue("@Weight", userModel.Weight);
-            }) > 0;
+                command.Parameters.AddWithValue("@Username", user.Username);
+                command.Parameters.AddWithValue("@Password", user.Password);
+                command.Parameters.AddWithValue("@FirstName", user.FirstName);
+                command.Parameters.AddWithValue("@LastName", user.LastName);
+                command.Parameters.AddWithValue("@DateOfBirth", user.DateOfBirth);
+                command.Parameters.AddWithValue("@Gender", user.Gender);
+                command.Parameters.AddWithValue("@Height", user.Height);
+                command.Parameters.AddWithValue("@Weight", user.Weight);
+             
+        return true;
         }
 
         public static int GetUserId(string username, DatabaseHelper dbManager)
