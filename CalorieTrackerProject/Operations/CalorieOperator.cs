@@ -25,7 +25,7 @@ namespace CalorieTrackerProject.Operations
         }
 
 
-        public void AddCaloriePlan(CaloriePlanModel planModel)
+        public bool AddCaloriePlan(CaloriePlanModel planModel)
         {
             var connection = DatabaseHelper.GetConnection();
             connection.Open();
@@ -36,6 +36,8 @@ namespace CalorieTrackerProject.Operations
             command.Parameters.AddWithValue("@DateStarted", planModel.DateStarted);
             command.Parameters.AddWithValue("@GoalDate", planModel.GoalDate);
             command.ExecuteNonQuery();
+            return true;
+
         }
 
         internal static void AddCalorieEntry(int userId)
