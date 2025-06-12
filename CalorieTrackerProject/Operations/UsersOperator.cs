@@ -4,7 +4,6 @@ namespace CalorieTracker
 {
     public class UserCredential
     {
-        private DatabaseHelper dbManager;
 
         public static bool Register(User user)
         {
