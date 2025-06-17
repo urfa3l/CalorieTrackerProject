@@ -70,10 +70,5 @@ namespace CalorieTracker
                 command.ExecuteNonQuery();
             }
         }
-
-        internal static void SetupDatabase()
-        {
-            throw new NotImplementedException();
-        }
     }
 }
