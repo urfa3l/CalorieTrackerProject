@@ -49,7 +49,7 @@ namespace CalorieTracker
                 }
                 else if (menuChoice == 3)
                 {
-                    SetUpDatabase.SetupDatabase();
+                    SetUpDatabase.setDatabase();
                 }
                 else if (menuChoice == 4)
                 {
