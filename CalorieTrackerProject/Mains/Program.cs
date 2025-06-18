@@ -107,11 +107,11 @@ namespace CalorieTracker
                 }
                 else if (userMenuChoice == 5)
                 {
-                    AddExercise.AddExercise(userId);
+                    ExerciseOperator.AddExercise(userId);
                 }
                 else if (userMenuChoice == 6)
                 {
-                    AddExercise.AddExercise(userId);
+                    ExerciseOperator.AddExerciseList(userId);
                 }
                 else if(userMenuChoice == 7)
                 {

@@ -11,12 +11,12 @@ namespace CalorieTrackerProject.Operations
 
 
 
-        public void AddCalorieTracker(CalorieTracker calorieTracker)
+        public void AddCalorieTracker(CalorieTrackerModel calorieTracker)
         {
             var connection = DatabaseHelper.GetConnection();
             connection.Open();
             var command = new SqlCommand("INSERT INTO CalorieTracker(UserID, CalorieIntakeTotal, CalorieOutputTotal, BMR, Date) VALUES(@UserID, @CalorieIntakeTotal, @CalorieOutputTotal, @BMR, @Date)", connection);
-            command.Parameters.AddWithValue("@UserID", calorieTracker.UserID);
+            command.Parameters.AddWithValue("@UserID", calorieTracker.User.UserID);
             command.Parameters.AddWithValue("@CalorieIntakeTotal", calorieTracker.CalorieIntakeTotal);
             command.Parameters.AddWithValue("@CalorieOutputTotal", calorieTracker.CalorieOutputTotal);
             command.Parameters.AddWithValue("@BMR", calorieTracker.BMR);
@@ -30,7 +30,7 @@ namespace CalorieTrackerProject.Operations
             var connection = DatabaseHelper.GetConnection();
             connection.Open();
             var command = new SqlCommand("INSERT INTO CaloriePlan (UserID, GoalWeight, DailyCalorieGoal, DateStarted, GoalDate) VALUES (@UserID, @GoalWeight, @DailyCalorieGoal, @DateStarted, @GoalDate)", connection);
-            command.Parameters.AddWithValue("@UserID", planModel.UserID);
+            command.Parameters.AddWithValue("@UserID", planModel.User.UserID);
             command.Parameters.AddWithValue("@GoalWeight", planModel.GoalWeight);
             command.Parameters.AddWithValue("@DailyCalorieGoal", planModel.DailyCalorieGoal);
             command.Parameters.AddWithValue("@DateStarted", planModel.DateStarted);
