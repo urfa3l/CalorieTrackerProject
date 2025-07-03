@@ -6,9 +6,9 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
 
-namespace CalorieTrackerProject.Operations
+namespace CalorieTrackerProject.DatabaseRepo
 {
-    internal class FoodRepoOperator
+    internal class FoodRepository
     {
 
         internal static void AddFoodList(string name, double caloriePerUnit, string unit)
@@ -41,30 +41,33 @@ namespace CalorieTrackerProject.Operations
                 }
             }
         }
-        internal static Food GetFoodById(int foodId)
+
+        internal static Food GetFoodByName(string name)
         {
             using (var connection = DatabaseHelper.GetConnection())
             {
                 connection.Open();
                 var command = new SqlCommand(
-                    "SELECT FoodListId, Name, CaloriePerUnit, Unit FROM FoodList WHERE FoodListId = @FoodListId",
+                    @"SELECT FoodListId, Name, CaloriePerUnit, Unit 
+                      FROM FoodList",
                     connection);
-                command.Parameters.AddWithValue("@FoodListId", foodId);
+
                 using (var reader = command.ExecuteReader())
                 {
-                    if (reader.Read())
+                    while (reader.Read())
                     {
-                        return new Food
+                        var dbName = reader["Name"].ToString();
+                        if (string.Equals(name.Trim(), dbName?.Trim(), StringComparison.InvariantCultureIgnoreCase))
                         {
-                            FoodId = Convert.ToInt32(reader["FoodListId"]),
-                            Name = reader["Name"].ToString(),
-                            Calorieperunit = Convert.ToDouble(reader["CaloriePerUnit"])
-                        };
+                            return new Food
+                            {
+                                FoodId = Convert.ToInt32(reader["FoodListId"]),
+                                Name = dbName,
+                                Calorieperunit = Convert.ToDouble(reader["CaloriePerUnit"])
+                            };
+                        }
                     }
-                    else
-                    {
-                        return null;
-                    }
+                    return null;
                 }
             }
         }

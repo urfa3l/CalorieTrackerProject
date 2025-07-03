@@ -12,5 +12,6 @@ namespace CalorieTracker
         public double BMR { get; set; }
         public DateTime Date { get; set; }
         public List<Excercise> Excercises { get; set; }
+
     }
 }

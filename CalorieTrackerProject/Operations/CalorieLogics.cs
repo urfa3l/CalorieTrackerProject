@@ -8,39 +8,32 @@ namespace CalorieTrackerProject.Operations
 {
     internal class CalorieLogics
     {
-        internal static AddCalorieByFood(User user)
+        internal static Food AddCalorieByFood(Food food)
         {
-
-            Console.Write("Enter your Food name from the list: ");
-
-            FoodRepoOperator.ViewFoodList();
-
-            if (!int.TryParse(Console.ReadLine(), out int menuChoice))
-            {
-                Console.WriteLine("Invalid choice. Please enter a number.");
-            }
-
-            Console.Write("Enter the amount of food consumed: ");
-
-            if (!double.TryParse(Console.ReadLine(), out double foodAmount))
-            {
-                Console.WriteLine("Invalid amount. Please enter a valid number.");
-            }
-
-            Food food = FoodRepoOperator.GetFoodById(menuChoice);
-
-            if (food == null)
-            {
-                Console.WriteLine("Food not found. Please try again.");
-                return;
-            }
-
-            else
-            {
-                double totalCalories = food.Calorieperunit * foodAmount;
-            }
+            var calorie = food.Calorieperunit * food.Amount;
+            return 
 
         }
 
+        internal static double CalculateCalorieBassallBurned(User user)
+        {
+            int age = DateTime.Now.Year - user.DateOfBirth.Year;
+
+            if (user.Gender == "Male")
+            {
+                return 88.362 + (13.397 * user.Weight) + (4.799 * user.Height) - (5.677 * age);
+            }
+            else if (user.Gender == "Female")
+            {
+                return 447.593 + (9.247 * user.Weight) + (3.098 * user.Height) - (4.330 * age);
+            }
+            else
+            {
+                throw new ArgumentException("Gender not recognized. Please specify 'Male' or 'Female'.");
+            }
+        }
+
     }
-}
+
+    }
+

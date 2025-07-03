@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace CalorieTrackerProject.Operations
+namespace CalorieTrackerProject.DatabaseRepo
 {
     internal class CalorieOperator
     {
@@ -40,30 +40,27 @@ namespace CalorieTrackerProject.Operations
 
         }
 
-        internal static void AddCalorieEntry(int userId)
+        internal static void AddCalorieEntry(User user, FoodIntake food)
         {
-            // Implementation for adding a calorie entry
+            var connection = DatabaseHelper.GetConnection();
+            connection.Open();
+            var command = new SqlCommand("INSERT INTO CalorieTracker (UserID, Calories, DateTime) VALUES (@UserID, @Calories, @DateTime)", connection);
         }
 
 
-        internal static void ViewCaloriePlan(int userId)
+        internal static void ViewCaloriePlan(User user)
         {
             // Implementation for viewing a calorie plan
         }
 
-        internal static void ViewDailyCalorieSummary(int userId)
+        internal static void GetDailyCalorieSummary(User user, DateTime date)
         {
             // Implementation for viewing daily calorie summary
         }
 
-        internal static void ViewMonthlyCalorieSummary(int userId)
+        internal static void GetMonthlyCalorieSummary(User user, int Month)
         {
             // Implementation for viewing monthly calorie summary
-        }
-
-        internal static void CalculateCalorieBassallBurned()
-        {
-            // implementation for metabolic basall burned
         }
 
     }

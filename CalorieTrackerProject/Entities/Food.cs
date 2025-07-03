@@ -9,6 +9,7 @@ namespace CalorieTrackerProject.Entities
         public int FoodId { get; set; }
         public string Name { get; set; }
         public double Calorieperunit { get; set; }
+        public double Amount { get; set; }
 
 
     }
