@@ -8,10 +8,10 @@ namespace CalorieTrackerProject.Operations
 {
     internal class CalorieLogics
     {
-        internal static Food AddCalorieByFood(Food food)
+        internal static double AddCalorieByFood(Food food)
         {
             var calorie = food.Calorieperunit * food.Amount;
-            return 
+            return calorie;
 
         }
 

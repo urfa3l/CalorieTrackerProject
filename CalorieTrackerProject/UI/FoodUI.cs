@@ -15,10 +15,6 @@ namespace CalorieTrackerProject.UI
 
             FoodRepository.ViewFoodList();
 
-            Console.Write("Enter your Food name from the list: ");
-
-            FoodRepository.ViewFoodList();
-
             string foodName = Console.ReadLine();
 
             Food food = FoodRepository.GetFoodByName(foodName);
@@ -44,7 +40,6 @@ namespace CalorieTrackerProject.UI
                         break;
                     }
                 }
-
                     food.Amount = foodAmount;
                 return food;
 
