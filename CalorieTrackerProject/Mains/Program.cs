@@ -1,6 +1,7 @@
-﻿using CalorieTracker;
+﻿using CalorieTrackerProject.DatabaseRepo;
+using CalorieTrackerProject.Entities;
 using CalorieTrackerProject.Functions.Excercise;
-using CalorieTrackerProject.Operations;
+using CalorieTrackerProject.UI;
 using System;
 
 namespace CalorieTracker
@@ -41,10 +42,12 @@ namespace CalorieTracker
                 if (menuChoice == 1)
                 {
                     userId = UserCredential.Register();
+                    //same here
                 }
                 else if (menuChoice == 2)
                 {
                     userId = UserCredential.Login();
+                    //fixing this is needed but things goes wayy off the intended scope for this PR/branch
                     UserMenu(userId)
                 }
                 else if (menuChoice == 3)
@@ -67,9 +70,10 @@ namespace CalorieTracker
             }
         }
 
-        private static void UserMenu(int userId)
+        private static void UserMenu(User user)
         {
             bool logout = false;
+            DateTime dateTime = DateTime.Now;
             while (!logout)
             {
                 Console.WriteLine("\nUser Menu:");
@@ -91,7 +95,8 @@ namespace CalorieTracker
 
                 if (userMenuChoice == 1)
                 {
-                    CalorieOperator.AddCalorieEntry(userId);
+                    Food food = FoodUI.foodIntakeUI();
+                    CalorieOperator.AddCalorieEntry(user, food);
                 }
                 else if (userMenuChoice == 2)
                 {
@@ -107,11 +112,11 @@ namespace CalorieTracker
                 }
                 else if (userMenuChoice == 5)
                 {
-                    AddExercise.AddExercise(userId);
+                    ExerciseOperator.AddExercise(userId);
                 }
                 else if (userMenuChoice == 6)
                 {
-                    AddExercise.AddExercise(userId);
+                    ExerciseOperator.AddExerciseList(userId);
                 }
                 else if(userMenuChoice == 7)
                 {

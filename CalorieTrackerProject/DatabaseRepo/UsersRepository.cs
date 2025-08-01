@@ -1,6 +1,7 @@
-﻿using Microsoft.Data.SqlClient;
+﻿using CalorieTracker;
+using Microsoft.Data.SqlClient;
 
-namespace CalorieTracker
+namespace CalorieTrackerProject.DatabaseRepo
 {
     public class UserCredential
     {
@@ -42,6 +43,29 @@ namespace CalorieTracker
             }
 
 
+        }
+
+        public static User GetUserByUserName(string username)
+        {
+            using var connection = DatabaseHelper.GetConnection();
+            connection.Open();
+            var command = new SqlCommand("SELECT UserID, Username, Password, FirstName, LastName, DateOfBirth, Gender, Height, Weight FROM Users WHERE Username = @Username", connection);
+            command.Parameters.AddWithValue("@Username", username);
+
+            using var reader = command.ExecuteReader();
+            if (reader.Read())
+            {
+                return new User
+                {
+                    FirstName = reader.GetString(reader.GetOrdinal("FirstName")),
+                    LastName = reader.GetString(reader.GetOrdinal("LastName")),
+                    DateOfBirth = reader.GetDateTime(reader.GetOrdinal("DateOfBirth")),
+                    Gender = reader.GetString(reader.GetOrdinal("Gender")),
+                    Height = reader.GetDouble(reader.GetOrdinal("Height")),
+                    Weight = reader.GetDouble(reader.GetOrdinal("Weight"))
+                };
+            }
+            return null;
         }
     }
 }

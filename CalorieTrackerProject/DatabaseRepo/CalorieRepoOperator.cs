@@ -4,19 +4,19 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace CalorieTrackerProject.Operations
+namespace CalorieTrackerProject.DatabaseRepo
 {
     internal class CalorieOperator
     {
 
 
 
-        public void AddCalorieTracker(CalorieTracker calorieTracker)
+        public void AddCalorieTracker(CalorieTrackerModel calorieTracker)
         {
             var connection = DatabaseHelper.GetConnection();
             connection.Open();
             var command = new SqlCommand("INSERT INTO CalorieTracker(UserID, CalorieIntakeTotal, CalorieOutputTotal, BMR, Date) VALUES(@UserID, @CalorieIntakeTotal, @CalorieOutputTotal, @BMR, @Date)", connection);
-            command.Parameters.AddWithValue("@UserID", calorieTracker.UserID);
+            command.Parameters.AddWithValue("@UserID", calorieTracker.User.UserID);
             command.Parameters.AddWithValue("@CalorieIntakeTotal", calorieTracker.CalorieIntakeTotal);
             command.Parameters.AddWithValue("@CalorieOutputTotal", calorieTracker.CalorieOutputTotal);
             command.Parameters.AddWithValue("@BMR", calorieTracker.BMR);
@@ -30,7 +30,7 @@ namespace CalorieTrackerProject.Operations
             var connection = DatabaseHelper.GetConnection();
             connection.Open();
             var command = new SqlCommand("INSERT INTO CaloriePlan (UserID, GoalWeight, DailyCalorieGoal, DateStarted, GoalDate) VALUES (@UserID, @GoalWeight, @DailyCalorieGoal, @DateStarted, @GoalDate)", connection);
-            command.Parameters.AddWithValue("@UserID", planModel.UserID);
+            command.Parameters.AddWithValue("@UserID", planModel.User.UserID);
             command.Parameters.AddWithValue("@GoalWeight", planModel.GoalWeight);
             command.Parameters.AddWithValue("@DailyCalorieGoal", planModel.DailyCalorieGoal);
             command.Parameters.AddWithValue("@DateStarted", planModel.DateStarted);
@@ -40,30 +40,27 @@ namespace CalorieTrackerProject.Operations
 
         }
 
-        internal static void AddCalorieEntry(int userId)
+        internal static void AddCalorieEntry(User user, FoodIntake food)
         {
-            // Implementation for adding a calorie entry
+            var connection = DatabaseHelper.GetConnection();
+            connection.Open();
+            var command = new SqlCommand("INSERT INTO CalorieTracker (UserID, Calories, DateTime) VALUES (@UserID, @Calories, @DateTime)", connection);
         }
 
 
-        internal static void ViewCaloriePlan(int userId)
+        internal static void ViewCaloriePlan(User user)
         {
             // Implementation for viewing a calorie plan
         }
 
-        internal static void ViewDailyCalorieSummary(int userId)
+        internal static void GetDailyCalorieSummary(User user, DateTime date)
         {
             // Implementation for viewing daily calorie summary
         }
 
-        internal static void ViewMonthlyCalorieSummary(int userId)
+        internal static void GetMonthlyCalorieSummary(User user, int Month)
         {
             // Implementation for viewing monthly calorie summary
-        }
-
-        internal static void CalculateCalorieBassallBurned()
-        {
-            // implementation for metabolic basall burned
         }
 
     }
