@@ -1,4 +1,5 @@
-﻿using CalorieTrackerProject.DatabaseRepo;
+﻿using CalorieTracker;
+using CalorieTrackerProject.DatabaseRepo;
 using CalorieTrackerProject.Entities;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ namespace CalorieTrackerProject.UI
 {
     internal class FoodUI
     {
-        internal static Food foodIntakeUI()
+        internal static FoodIntake foodIntakeUI()
         {
 
             Console.Write("Enter your Food name from the list: ");
@@ -41,7 +42,12 @@ namespace CalorieTrackerProject.UI
                     }
                 }
                     food.Amount = foodAmount;
-                return food;
+                FoodIntake foodIntake = new FoodIntake();
+                foodIntake.FoodID = food.FoodId;
+                foodIntake.Amount = foodAmount;
+                foodIntake.CalorieIncrease = foodAmount * food.Calorieperunit;
+
+                return foodIntake;
 
             }
         }

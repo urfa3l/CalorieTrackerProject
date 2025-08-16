@@ -58,7 +58,7 @@ namespace CalorieTrackerProject.DatabaseRepo
             // Implementation for viewing daily calorie summary
         }
 
-        internal static void GetMonthlyCalorieSummary(User user, int Month)
+        internal static void GetMonthlyCalorieSummary(User user, int Month, int year)
         {
             // Implementation for viewing monthly calorie summary
         }

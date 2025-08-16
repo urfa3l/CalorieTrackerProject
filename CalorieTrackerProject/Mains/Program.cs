@@ -1,6 +1,5 @@
-﻿using CalorieTrackerProject.DatabaseRepo;
-using CalorieTrackerProject.Entities;
-using CalorieTrackerProject.Functions.Excercise;
+﻿using CalorieTrackerProject;
+using CalorieTrackerProject.DatabaseRepo;
 using CalorieTrackerProject.UI;
 using System;
 
@@ -23,7 +22,8 @@ namespace CalorieTracker
         private static void MainMenu()
         {
             bool exit = false;
-            int userId = -1;
+            bool loggedin = false;
+            User user = new User();
             while (!exit)
             {
                 Console.WriteLine("\nChoose an option:");
@@ -41,14 +41,42 @@ namespace CalorieTracker
 
                 if (menuChoice == 1)
                 {
-                    userId = UserCredential.Register();
-                    //same here
+                    user = UserUI.CreateUser();
+                    Console.WriteLine("Enter your username: ");
+                    var username = Console.ReadLine();
+                    while (string.IsNullOrWhiteSpace(username))
+                    {
+                        Console.WriteLine("Invalid input. please retry");
+                        username = Console.ReadLine();
+                    }
+                    Console.WriteLine("Enter your password: ");
+                    var password = Console.ReadLine();
+                    while (string.IsNullOrWhiteSpace(password))
+                    {
+                        Console.WriteLine("Invalid input. please retry");
+                        password = Console.ReadLine();
+                    }
+                    loggedin = UserCredential.Register(user, username, password);
+                    UserMenu(user);
                 }
                 else if (menuChoice == 2)
                 {
-                    userId = UserCredential.Login();
-                    //fixing this is needed but things goes wayy off the intended scope for this PR/branch
-                    UserMenu(userId)
+                    Console.WriteLine("Enter your username: ");
+                    var username = Console.ReadLine();
+                    while (string.IsNullOrWhiteSpace(username))
+                    {
+                        Console.WriteLine("Invalid input. please retry");
+                        username = Console.ReadLine();
+                    }
+                    Console.WriteLine("Enter your password: ");
+                    var password = Console.ReadLine();
+                    while (string.IsNullOrWhiteSpace(password))
+                    {
+                        Console.WriteLine("Invalid input. please retry");
+                        password = Console.ReadLine();
+                    }
+                    user = UserCredential.Login(username, password);
+                    UserMenu(user);
                 }
                 else if (menuChoice == 3)
                 {
@@ -61,11 +89,6 @@ namespace CalorieTracker
                 else
                 {
                     Console.WriteLine("Invalid choice. Please try again.");
-                }
-
-                if (userId != -1)
-                {
-                    UserMenu(userId);
                 }
             }
         }
@@ -95,7 +118,7 @@ namespace CalorieTracker
 
                 if (userMenuChoice == 1)
                 {
-                    Food food = FoodUI.foodIntakeUI();
+                    FoodIntake food = FoodUI.foodIntakeUI();
                     CalorieOperator.AddCalorieEntry(user, food);
                 }
                 else if (userMenuChoice == 2)
@@ -104,19 +127,92 @@ namespace CalorieTracker
                 }
                 else if (userMenuChoice == 3)
                 {
-                    CalorieOperator.ViewDailyCalorieSummary(userId);
+
+                    Console.WriteLine("Put in which month you want to see:");
+                    var monthInput = Console.ReadLine();
+
+                    Console.WriteLine("Put in which day you want to see:");
+                    var dayInput = Console.ReadLine();
+
+                    Console.WriteLine("Put in which year you want to see:");
+                    var yearInput = Console.ReadLine();
+
+                    // Try to parse the inputs into integers
+                    if (int.TryParse(yearInput, out int year) && int.TryParse(monthInput, out int month) && int.TryParse(dayInput, out int day))
+                    {
+                        // Check if the year is in the future
+                        if (year > dateTime.Year)
+                        {
+                            Console.WriteLine("The year is in the future.");
+                        }
+                        else
+                        {
+                            Console.WriteLine("The year is not in the future.");
+                        }
+
+                        // Validate if the provided day, month, and year form a valid date
+                        if (month < 1 || month > 12)
+                        {
+                            Console.WriteLine("Invalid month. Please enter a value between 1 and 12.");
+                        }
+                        else if (day < 1 || day > DateTime.DaysInMonth(year, month))
+                        {
+                            Console.WriteLine($"Invalid day. Please enter a value between 1 and {DateTime.DaysInMonth(year, month)} for the given month and year.");
+                        }
+                        else
+                        {
+                            DateTime inputDate = new DateTime(year, month, day);
+                            CalorieOperator.GetDailyCalorieSummary(user, inputDate);
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("Invalid input. Please make sure to enter numeric values for day, month, and year.");
+                    }
                 }
                 else if (userMenuChoice == 4)
                 {
-                    CalorieOperator.ViewMonthlyCalorieSummary(userId);
+                    DateTime now = DateTime.Now;
+
+                    Console.WriteLine("Put in which month you want to see:");
+                    var monthInput = Console.ReadLine();
+
+                    Console.WriteLine("Put in which year you want to see:");
+                    var yearInput = Console.ReadLine();
+
+                    if (int.TryParse(monthInput, out int month) && int.TryParse(yearInput, out int year))
+                    {
+                        if (month < 1 || month > 12)
+                        {
+                            Console.WriteLine("Invalid input. Please retry.");
+                            return; // Exit the method or loop based on invalid input
+                        }
+
+                        // Combined year validation: Ensure year is between 1 and the current year
+                        if (year < 1 || year > now.Year)
+                        {
+                            Console.WriteLine("Invalid input. Please retry.");
+                            return; // Exit the method or loop based on invalid input
+                        }
+
+                        // Call the CalorieOperator method with validated inputs
+                        CalorieOperator.GetMonthlyCalorieSummary(user, month, year);
+                    }
+                    else
+                    {
+                        Console.WriteLine("Invalid input. Please make sure to enter numeric values for month and year.");
+                    }
                 }
                 else if (userMenuChoice == 5)
                 {
-                    ExerciseOperator.AddExercise(userId);
+                    ExerciseOperator.AddExerciseOperator(userId);
                 }
                 else if (userMenuChoice == 6)
                 {
-                    ExerciseOperator.AddExerciseList(userId);
+                    Console.WriteLine("Input the name: ");
+                    var name = Console.ReadLine();
+
+                    ExerciseOperator.AddExerciseList();
                 }
                 else if(userMenuChoice == 7)
                 {
