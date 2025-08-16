@@ -137,10 +137,8 @@ namespace CalorieTracker
                     Console.WriteLine("Put in which year you want to see:");
                     var yearInput = Console.ReadLine();
 
-                    // Try to parse the inputs into integers
                     if (int.TryParse(yearInput, out int year) && int.TryParse(monthInput, out int month) && int.TryParse(dayInput, out int day))
                     {
-                        // Check if the year is in the future
                         if (year > dateTime.Year)
                         {
                             Console.WriteLine("The year is in the future.");
@@ -150,7 +148,6 @@ namespace CalorieTracker
                             Console.WriteLine("The year is not in the future.");
                         }
 
-                        // Validate if the provided day, month, and year form a valid date
                         if (month < 1 || month > 12)
                         {
                             Console.WriteLine("Invalid month. Please enter a value between 1 and 12.");
@@ -185,17 +182,15 @@ namespace CalorieTracker
                         if (month < 1 || month > 12)
                         {
                             Console.WriteLine("Invalid input. Please retry.");
-                            return; // Exit the method or loop based on invalid input
+                            return; 
                         }
 
-                        // Combined year validation: Ensure year is between 1 and the current year
                         if (year < 1 || year > now.Year)
                         {
                             Console.WriteLine("Invalid input. Please retry.");
-                            return; // Exit the method or loop based on invalid input
+                            return;
                         }
 
-                        // Call the CalorieOperator method with validated inputs
                         CalorieOperator.GetMonthlyCalorieSummary(user, month, year);
                     }
                     else
