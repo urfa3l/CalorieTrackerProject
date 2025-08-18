@@ -6,14 +6,14 @@ namespace CalorieTrackerProject.DatabaseRepo
     public class UserCredential
     {
 
-        public static bool Register(User user)
+        public static bool Register(User user, string Username, string Password)
         {
             var connection = DatabaseHelper.GetConnection();
             connection.Open();
             var command = new SqlCommand("INSERT INTO Users (Username, Password, FirstName, LastName, DateOfBirth, Gender, Height, Weight) " +
                                             "VALUES (@Username, @Password, @FirstName, @LastName, @DateOfBirth, @Gender, @Height, @Weight)", connection);
-                command.Parameters.AddWithValue("@Username", user.Username);
-                command.Parameters.AddWithValue("@Password", user.Password);
+                command.Parameters.AddWithValue("@Username", Username);
+                command.Parameters.AddWithValue("@Password", Password);
                 command.Parameters.AddWithValue("@FirstName", user.FirstName);
                 command.Parameters.AddWithValue("@LastName", user.LastName);
                 command.Parameters.AddWithValue("@DateOfBirth", user.DateOfBirth);
@@ -24,22 +24,32 @@ namespace CalorieTrackerProject.DatabaseRepo
         return true;
         }
 
-        public static bool Login(string username, string password, DatabaseHelper dbManager)
+        public static User Login(string username, string password)
         {
             using var connection = DatabaseHelper.GetConnection();
             connection.Open();
-            var command = new SqlCommand("SELECT COUNT(1) FROM Users WHERE Username = @Username AND Password = @Password", connection);
+            var command = new SqlCommand("SELECT * FROM Users WHERE Username = @Username AND Password = @Password", connection);
             command.Parameters.AddWithValue("@Username", username);
             command.Parameters.AddWithValue("@Password", password);
 
-            var result = (int)command.ExecuteScalar();
-            if (result > 0)             
+            using var reader = command.ExecuteReader();
+            if (reader.Read()) 
             {
-                return true;
+                var user = new User
+                {
+                    FirstName = reader.GetString(reader.GetOrdinal("FirstName")),
+                    LastName = reader.GetString(reader.GetOrdinal("LastName")),
+                    DateOfBirth = reader.GetDateTime(reader.GetOrdinal("DateOfBirth")), 
+                    Gender = reader.GetString(reader.GetOrdinal("Gender")),
+                    Height = reader.GetDouble(reader.GetOrdinal("Height")), 
+                    Weight = reader.GetDouble(reader.GetOrdinal("Weight"))  
+                };
+
+                return user; 
             }
             else
             {
-                return false;
+                return null;
             }
 
 

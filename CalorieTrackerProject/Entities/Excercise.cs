@@ -4,9 +4,10 @@ using System.Text;
 
 namespace CalorieTracker
 {
-    internal class Excercise
+    public class Excercise
     {
         public string name {  get; set; }
+        public double calorieScale { get; set; }
 
     }
 }
