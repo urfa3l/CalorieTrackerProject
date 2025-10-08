@@ -123,7 +123,7 @@ namespace CalorieTracker
                 }
                 else if (userMenuChoice == 2)
                 {
-                    CalorieOperator.ViewCaloriePlan(userId);
+                    //CalorieOperator.ViewCaloriePlan(userId);
                 }
                 else if (userMenuChoice == 3)
                 {
@@ -200,14 +200,27 @@ namespace CalorieTracker
                 }
                 else if (userMenuChoice == 5)
                 {
-                    ExerciseOperator.AddExerciseOperator(userId);
+                    ExerciseOperator.AddExercise(userId);
                 }
                 else if (userMenuChoice == 6)
                 {
                     Console.WriteLine("Input the name: ");
                     var name = Console.ReadLine();
+                    Console.WriteLine("Input the calorie burned per minute: ");
+                    double caloriePerMinute;
+                    while (!double.TryParse(Console.ReadLine(), out caloriePerMinute) || caloriePerMinute <= 0)
+                    {
+                        Console.WriteLine("Invalid input, please enter a positive number (decimals allowed):");
 
-                    ExerciseOperator.AddExerciseList();
+                    }
+                    Console.WriteLine("Is this exercise static? (true/false): ");
+                    bool isStatic;
+                    while (!bool.TryParse(Console.ReadLine(), out isStatic))
+                    {
+                        Console.WriteLine("Invalid input, please enter 'true' or 'false':");
+                    }
+                    ExerciseOperator.AddExerciseList(name, caloriePerMinute, isStatic);
+
                 }
                 else if(userMenuChoice == 7)
                 {

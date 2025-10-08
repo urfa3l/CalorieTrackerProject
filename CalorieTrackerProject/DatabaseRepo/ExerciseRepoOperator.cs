@@ -14,7 +14,7 @@ namespace CalorieTrackerProject.DatabaseRepo
             {
                 connection.Open();
                 var command = new SqlCommand(
-                    "INSERT INTO ExcerciseList (Name, CaloriePerMinute, IsStatic) VALUES (@Name, @CaloriePerMinute, @IsStatic)",
+                    "INSERT INTO ExcerciseType (Name, CaloriePerMinute, IsStatic) VALUES (@Name, @CaloriePerMinute, @IsStatic)",
                     connection);
                 command.Parameters.AddWithValue("@Name", name);
                 command.Parameters.AddWithValue("@CaloriePerMinute", caloriePerMinute);
@@ -27,7 +27,7 @@ namespace CalorieTrackerProject.DatabaseRepo
             using (var connection = DatabaseHelper.GetConnection())
             {
                 connection.Open();
-                var command = new SqlCommand("DELETE FROM ExcerciseList WHERE Name = @Name", connection);
+                var command = new SqlCommand("DELETE FROM ExcerciseType WHERE Name = @Name", connection);
                 command.Parameters.AddWithValue("@Name", name);
                 command.ExecuteNonQuery();
             }
