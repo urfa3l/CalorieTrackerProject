@@ -32,15 +32,15 @@ namespace CalorieTrackerProject.DatabaseRepo
                 command.ExecuteNonQuery();
             }
         }
-        internal static void AddExercise(int userId, string name, int durationinminute, DateTime date, int? speed, bool isstatic)
+        internal static void AddExerciseDone(string username, string name, int durationinminute, DateTime date, int? speed, bool isstatic)
         {
             using (var connection = DatabaseHelper.GetConnection())
             {
                 connection.Open();
                 var command = new SqlCommand(
-                    "INSERT INTO Excercise (UserId, Excercise, DurationInMinute, Date, Speed, IsStatic) VALUES (@UserId, @Name, @Duration, @Date, @Speed, @IsStatic)",
+                    "INSERT INTO Excercise (Username, Excercise, DurationInMinute, Date, Speed, IsStatic) VALUES (@UserId, @Name, @Duration, @Date, @Speed, @IsStatic)",
                     connection);
-                command.Parameters.AddWithValue("@UserId", userId);
+                command.Parameters.AddWithValue("@Username", username);
                 command.Parameters.AddWithValue("@Name", name);
                 command.Parameters.AddWithValue("@Duration", durationinminute);
                 command.Parameters.AddWithValue("@Date", date);

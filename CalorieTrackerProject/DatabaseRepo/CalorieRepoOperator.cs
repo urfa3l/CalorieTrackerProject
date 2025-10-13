@@ -25,12 +25,11 @@ namespace CalorieTrackerProject.DatabaseRepo
         }
 
 
-        public bool AddCaloriePlan(CaloriePlanModel planModel)
+        public static bool AddCaloriePlan(CaloriePlanModel planModel)
         {
             var connection = DatabaseHelper.GetConnection();
             connection.Open();
-            var command = new SqlCommand("INSERT INTO CaloriePlan (UserID, GoalWeight, DailyCalorieGoal, DateStarted, GoalDate) VALUES (@UserID, @GoalWeight, @DailyCalorieGoal, @DateStarted, @GoalDate)", connection);
-            //command.Parameters.AddWithValue("@UserID", planModel.User.UserID);
+            var command = new SqlCommand("INSERT INTO CaloriePlan (Username, GoalWeight, DailyCalorieGoal, DateStarted, GoalDate) VALUES (@UserID, @GoalWeight, @DailyCalorieGoal, @DateStarted, @GoalDate)", connection);
             command.Parameters.AddWithValue("@GoalWeight", planModel.GoalWeight);
             command.Parameters.AddWithValue("@DailyCalorieGoal", planModel.DailyCalorieGoal);
             command.Parameters.AddWithValue("@DateStarted", planModel.DateStarted);
@@ -40,17 +39,46 @@ namespace CalorieTrackerProject.DatabaseRepo
 
         }
 
-        internal static void AddCalorieEntry(User user, FoodIntake food)
+        internal static void AddCalorieEntry(User user, FoodIntake food, DateTime dateTime)
         {
             var connection = DatabaseHelper.GetConnection();
             connection.Open();
-            var command = new SqlCommand("INSERT INTO CalorieTracker (UserID, Calories, DateTime) VALUES (@UserID, @Calories, @DateTime)", connection);
+            var command = new SqlCommand("INSERT INTO CalorieTracker (Username, Calories, DateTime) VALUES (@Username, @Calories, @DateTime)", connection);
+            command.Parameters.AddWithValue("@Username", user.username);
+            command.Parameters.AddWithValue("@Calories", food.CalorieIncrease);
+            command.Parameters.AddWithValue("@DateTime", dateTime);
         }
 
 
         internal static void ViewCaloriePlan(User user)
         {
-            // Implementation for viewing a calorie plan
+            using var connection = DatabaseHelper.GetConnection();
+            connection.Open();
+            var command = new SqlCommand(
+                @"SELECT GoalWeight, DailyCalorieGoal, DateStarted, GoalDate 
+                  FROM CaloriePlan 
+                  WHERE Username = @Username",
+                connection);
+            command.Parameters.AddWithValue("@Username", user.username);
+
+            using var reader = command.ExecuteReader();
+            if (reader.Read())
+            {
+                double goalWeight = reader.GetDouble(reader.GetOrdinal("GoalWeight"));
+                double dailyCalorieGoal = reader.GetDouble(reader.GetOrdinal("DailyCalorieGoal"));
+                DateTime dateStarted = reader.GetDateTime(reader.GetOrdinal("DateStarted"));
+                DateTime goalDate = reader.GetDateTime(reader.GetOrdinal("GoalDate"));
+
+                Console.WriteLine($"Calorie Plan for {user.username}:");
+                Console.WriteLine($"Goal Weight: {goalWeight} kg");
+                Console.WriteLine($"Daily Calorie Goal: {dailyCalorieGoal} kcal");
+                Console.WriteLine($"Date Started: {dateStarted:dd-MM-yyyy}");
+                Console.WriteLine($"Goal Date: {goalDate:dd-MM-yyyy}");
+            }
+            else
+            {
+                Console.WriteLine($"No calorie plan found for user {user.username}.");
+            }
         }
 
         internal static void GetDailyCalorieSummary(User user, DateTime date)
