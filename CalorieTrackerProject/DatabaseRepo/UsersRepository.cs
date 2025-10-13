@@ -1,5 +1,7 @@
 ﻿using CalorieTracker;
 using Microsoft.Data.SqlClient;
+using System.Collections.Generic;
+using System;
 
 namespace CalorieTrackerProject.DatabaseRepo
 {
@@ -76,6 +78,39 @@ namespace CalorieTrackerProject.DatabaseRepo
                 };
             }
             return null;
+        }
+
+        public static List<User> GetAllUsers()
+        {
+            var users = new List<User>();
+            string query = "SELECT FirstName, LastName, DateOfBirth, Gender, Height, Weight, username FROM Users";
+            using (var reader = DatabaseHelper.ExecuteQuery(query))
+            {
+                while (reader.Read())
+                {
+                    users.Add(new User
+                    {
+                        FirstName = reader["FirstName"].ToString(),
+                        LastName = reader["LastName"].ToString(),
+                        DateOfBirth = Convert.ToDateTime(reader["DateOfBirth"]),
+                        Gender = reader["Gender"].ToString(),
+                        Height = Convert.ToDouble(reader["Height"]),
+                        Weight = Convert.ToDouble(reader["Weight"]),
+                        username = reader["username"].ToString()
+                    });
+                }
+            }
+            return users;
+        }
+
+        public static void UpdateUserWeight(string username, double newWeight)
+        {
+            using var connection = DatabaseHelper.GetConnection();
+            connection.Open();
+            var command = new SqlCommand("UPDATE Users SET Weight = @Weight WHERE Username = @Username", connection);
+            command.Parameters.AddWithValue("@Weight", newWeight);
+            command.Parameters.AddWithValue("@Username", username);
+            command.ExecuteNonQuery();
         }
     }
 }

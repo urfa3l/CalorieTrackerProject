@@ -10,5 +10,6 @@ namespace CalorieTracker
         public string Gender { get; set; }
         public double Height { get; set; }
         public double Weight { get; set; }
+        public string username { get; set; }
     }
 }

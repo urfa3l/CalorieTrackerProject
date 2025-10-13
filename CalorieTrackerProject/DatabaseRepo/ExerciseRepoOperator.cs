@@ -14,7 +14,7 @@ namespace CalorieTrackerProject.DatabaseRepo
             {
                 connection.Open();
                 var command = new SqlCommand(
-                    "INSERT INTO ExcerciseList (Name, CaloriePerMinute, IsStatic) VALUES (@Name, @CaloriePerMinute, @IsStatic)",
+                    "INSERT INTO ExcerciseType (Name, CaloriePerMinute, IsStatic) VALUES (@Name, @CaloriePerMinute, @IsStatic)",
                     connection);
                 command.Parameters.AddWithValue("@Name", name);
                 command.Parameters.AddWithValue("@CaloriePerMinute", caloriePerMinute);
@@ -27,20 +27,20 @@ namespace CalorieTrackerProject.DatabaseRepo
             using (var connection = DatabaseHelper.GetConnection())
             {
                 connection.Open();
-                var command = new SqlCommand("DELETE FROM ExcerciseList WHERE Name = @Name", connection);
+                var command = new SqlCommand("DELETE FROM ExcerciseType WHERE Name = @Name", connection);
                 command.Parameters.AddWithValue("@Name", name);
                 command.ExecuteNonQuery();
             }
         }
-        internal static void AddExercise(int userId, string name, int durationinminute, DateTime date, int? speed, bool isstatic)
+        internal static void AddExerciseDone(string username, string name, int durationinminute, DateTime date, int? speed, bool isstatic)
         {
             using (var connection = DatabaseHelper.GetConnection())
             {
                 connection.Open();
                 var command = new SqlCommand(
-                    "INSERT INTO Excercise (UserId, Excercise, DurationInMinute, Date, Speed, IsStatic) VALUES (@UserId, @Name, @Duration, @Date, @Speed, @IsStatic)",
+                    "INSERT INTO Excercise (Username, Excercise, DurationInMinute, Date, Speed, IsStatic) VALUES (@UserId, @Name, @Duration, @Date, @Speed, @IsStatic)",
                     connection);
-                command.Parameters.AddWithValue("@UserId", userId);
+                command.Parameters.AddWithValue("@Username", username);
                 command.Parameters.AddWithValue("@Name", name);
                 command.Parameters.AddWithValue("@Duration", durationinminute);
                 command.Parameters.AddWithValue("@Date", date);
